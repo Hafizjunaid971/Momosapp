@@ -9,11 +9,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const cors = require('cors');
-
-app.use(cors({
-  origin: '*'
-}));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -23,12 +19,17 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 
+// Home Route
+app.get('/', (req, res) => {
+  res.json({ message: 'API Running!' });
+});
+
 // MongoDB Connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
-    app.listen(process.env.PORT, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT}`);
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`🚀 Server running!`);
     });
   })
   .catch(err => console.log('❌ MongoDB Error:', err));
