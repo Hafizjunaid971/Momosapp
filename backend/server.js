@@ -9,17 +9,12 @@ dotenv.config();
 const app = express();
 
 // Middleware
+const cors = require('cors');
+
 app.use(cors({
-  origin: [
-    'https://gbdumpling.com',
-    'https://gb-dumbling.vercel.app',
-    'https://gb-dumbling-2iol.vercel.app',
-    'https://gb-dumbling-2iol-git-master-developers-projects-05ab7480.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ],
-  credentials: true
-}));app.use(express.json());
+  origin: '*'
+}));
+app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
