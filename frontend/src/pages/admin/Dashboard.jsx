@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../utils/api';
-import { FaBox, FaShoppingBag, FaDollarSign,TbCategory, FaUsers } from 'react-icons/fa';
-import { MdCategory } from "react-icons/md";
+import { FaBox, FaShoppingBag, FaDollarSign } from 'react-icons/fa';
 
 // Usage
 const Dashboard = () => {

@@ -32,7 +32,7 @@ const Menu = () => {
       }
     };
     fetchCategories();
-  }, []);
+  }, [location.search]);
 
   // STEP 3 — Sirf tab products fetch karo jab ready ho
   useEffect(() => {

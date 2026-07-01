@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaTrash, FaPlus, FaMinus, FaShoppingBag } from 'react-icons/fa';
 
 const CartDrawer = ({ isOpen, onClose }) => {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
+const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
