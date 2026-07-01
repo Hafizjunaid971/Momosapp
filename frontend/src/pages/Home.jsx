@@ -11,17 +11,19 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchData = async () => {
       try {
         const [featRes, catRes] = await Promise.all([
           API.get('/products/featured'),
           API.get('/categories')
         ]);
-        setFeatured(featRes.data);
-        setCategories(catRes.data);
+        setFeatured(Array.isArray(featRes.data) ? featRes.data : []);
+        setCategories(Array.isArray(catRes.data) ? catRes.data : []);
       } catch (error) {
         console.log(error);
+        setFeatured([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }

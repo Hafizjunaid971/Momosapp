@@ -16,26 +16,27 @@ const Menu = () => {
   const location = useLocation();
 
   // STEP 1 — Pehle categories load karo
-  useEffect(() => {
+  // STEP 1
+useEffect(() => {
     const fetchCategories = async () => {
       try {
         const res = await API.get('/categories');
-        setCategories(res.data);
+        setCategories(Array.isArray(res.data) ? res.data : []);
       } catch (error) {
         console.log(error);
+        setCategories([]);
       } finally {
-        // STEP 2 — URL se category set karo
         const params = new URLSearchParams(location.search);
         const cat = params.get('category');
         if (cat) setSelectedCategory(cat);
-        setReady(true); // ab products fetch karne ke liye ready
+        setReady(true);
       }
     };
     fetchCategories();
   }, [location.search]);
 
-  // STEP 3 — Sirf tab products fetch karo jab ready ho
-  useEffect(() => {
+// STEP 3
+useEffect(() => {
     if (!ready) return;
 
     const fetchProducts = async () => {
@@ -45,9 +46,10 @@ const Menu = () => {
         if (selectedCategory) url += `category=${selectedCategory}&`;
         if (search) url += `search=${search}`;
         const res = await API.get(url);
-        setProducts(res.data);
+        setProducts(Array.isArray(res.data) ? res.data : []);
       } catch (error) {
         console.log(error);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -55,7 +57,6 @@ const Menu = () => {
 
     fetchProducts();
   }, [selectedCategory, search, ready]);
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* HEADER */}
