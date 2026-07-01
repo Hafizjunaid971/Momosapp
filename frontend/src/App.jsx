@@ -12,6 +12,7 @@ import Orders from './pages/Orders';
 import Dashboard from './pages/admin/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
+import ManageCategories from './pages/admin/ManageCategories';
 import { useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -60,6 +61,9 @@ function App() {
         <Route path="/admin/orders" element={
           <AdminRoute><ManageOrders /></AdminRoute>
         } />
+              <Route path="/admin/categories" element={
+                  <AdminRoute><ManageCategories /></AdminRoute>
+              } />
       </Routes>
       <Footer />
     </Router>

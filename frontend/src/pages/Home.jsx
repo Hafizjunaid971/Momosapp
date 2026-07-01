@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../utils/api';
 import ProductCard from '../components/ProductCard';
+import ProductModal from '../components/ProductModal';
 import { FaArrowRight, FaTruck, FaClock, FaStar } from 'react-icons/fa';
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,31 +81,47 @@ const Home = () => {
       </section>
 
       {/* CATEGORIES */}
-      {categories.length > 0 && (
-        <section className="py-12 px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-              Our Categories
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {categories.map(cat => (
-                <Link
-                  key={cat._id}
-                  to={`/menu?category=${cat._id}`}
-                  className="bg-white rounded-2xl shadow p-4 text-center hover:shadow-lg transition hover:-translate-y-1 group"
-                >
-                  <img
-                    src={cat.image || 'https://via.placeholder.com/100?text=🍽️'}
-                    alt={cat.name}
-                    className="w-16 h-16 object-cover rounded-full mx-auto mb-3 group-hover:scale-110 transition"
-                  />
-                  <h3 className="font-semibold text-gray-700">{cat.name}</h3>
-                </Link>
-              ))}
+      {/* CATEGORIES */}
+{categories.length > 0 && (
+  <section className="py-12 px-4">
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+        Our Categories
+      </h2>
+      <p className="text-gray-400 text-center mb-8">
+        What are you craving today?
+      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {categories.map(cat => (
+          <Link
+            key={cat._id}
+            to={`/menu?category=${cat._id}`}
+            className="group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300 hover:-translate-y-1"
+          >
+            {/* IMAGE */}
+            <div className="w-full h-36">
+              <img
+                src={cat.image || 'https://via.placeholder.com/300x200?text=🍽️'}
+                alt={cat.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+              />
             </div>
-          </div>
-        </section>
-      )}
+
+            {/* DARK OVERLAY */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+
+            {/* NAME */}
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <h3 className="text-white font-bold text-sm text-center drop-shadow">
+                {cat.name}
+              </h3>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
 
       {/* FEATURED PRODUCTS */}
       <section className="py-12 px-4 bg-gray-50">
@@ -121,9 +139,13 @@ const Home = () => {
               <p className="text-gray-500 mt-3">Loading...</p>
             </div>
           ) : featured.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featured.map(product => (
-                <ProductCard key={product._id} product={product} />
+// Menu.jsx aur Home.jsx mein grid div update karo
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">              {featured.map(product => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onClick={setSelectedProduct}
+                />
               ))}
             </div>
           ) : (
@@ -151,6 +173,12 @@ const Home = () => {
           Order Now →
         </Link>
       </section>
+
+      {/* PRODUCT MODAL */}
+      <ProductModal
+        product={selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
     </div>
   );
 };
