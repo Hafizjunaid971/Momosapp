@@ -23,10 +23,18 @@ const Navbar = () => {
         <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
 
           {/* LOGO */}
-          <Link to="/" className="text-2xl font-bold text-primary">
-            🍱 GB Dumplings Corner
+                <Link to="/" className="flex items-center gap-2">
+        <img
+          src="/logo.png"
+          alt="GB Dumplings Corner"
+  className="h-10 w-10 object-contain scale-150"
+        />
+        <span className="text-2xl font-bold text-primary">
+          GB Dumplings Corner
+        </span>
+      </Link>
 
-          </Link>
+
 
           {/* DESKTOP LINKS */}
           <div className="hidden md:flex items-center gap-6">
