@@ -43,6 +43,9 @@ const Navbar = () => {
             {user && (
               <Link to="/orders" className="text-gray-600 hover:text-primary font-medium">My Orders</Link>
             )}
+            {!user && (
+              <Link to="/track-order" className="text-gray-600 hover:text-primary font-medium">Track Order</Link>
+            )}
             {user?.role === 'admin' && (
               <Link to="/admin" className="text-gray-600 hover:text-primary font-medium">Admin</Link>
             )}
@@ -113,6 +116,9 @@ const Navbar = () => {
             <Link to="/menu" onClick={() => setMenuOpen(false)} className="text-gray-600 hover:text-primary font-medium py-2 border-b">Menu</Link>
             {user && (
               <Link to="/orders" onClick={() => setMenuOpen(false)} className="text-gray-600 hover:text-primary font-medium py-2 border-b">My Orders</Link>
+            )}
+            {!user && (
+              <Link to="/track-order" onClick={() => setMenuOpen(false)} className="text-gray-600 hover:text-primary font-medium py-2 border-b">Track Order</Link>
             )}
             {user?.role === 'admin' && (
               <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-gray-600 hover:text-primary font-medium py-2 border-b">Admin</Link>

@@ -11,6 +11,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Orders from './pages/Orders';
+import TrackOrder from './pages/TrackOrder';
 import Dashboard from './pages/admin/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
@@ -45,12 +46,9 @@ function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/cart" element={
-          <ProtectedRoute><Cart /></ProtectedRoute>
-        } />
-        <Route path="/checkout" element={
-          <ProtectedRoute><Checkout /></ProtectedRoute>
-        } />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/track-order" element={<TrackOrder />} />
         <Route path="/orders" element={
           <ProtectedRoute><Orders /></ProtectedRoute>
         } />

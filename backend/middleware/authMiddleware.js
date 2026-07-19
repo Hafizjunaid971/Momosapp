@@ -25,6 +25,24 @@ const protect = async (req, res, next) => {
   }
 };
 
+// Optional auth - doesn't fail if no token
+const optionalAuth = async (req, res, next) => {
+  try {
+    let token;
+
+    if (req.headers.authorization && 
+        req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-password');
+    }
+    next();
+  } catch (error) {
+    // Fail silently, continue without user
+    next();
+  }
+};
+
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
@@ -33,4 +51,4 @@ const adminOnly = (req, res, next) => {
   }
 };
 
-module.exports = { protect, adminOnly };
+module.exports = { protect, adminOnly, optionalAuth };

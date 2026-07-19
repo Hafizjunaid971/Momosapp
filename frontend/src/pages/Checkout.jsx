@@ -1,16 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import API from '../utils/api';
 import { toast } from 'react-hot-toast';
 
 const Checkout = () => {
   const { cartItems, totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    deliveryAddress: '', phone: '', paymentMethod: 'cash'
+    deliveryAddress: '', 
+    phone: '', 
+    paymentMethod: 'cash',
+    guestEmail: ''
   });
   const [loading, setLoading] = useState(false);
+
+  // Pre-fill phone if user has one
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({ ...prev, phone: user.phone || '' }));
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,17 +36,36 @@ const Checkout = () => {
         image: item.image
       }));
 
-      await API.post('/orders', {
+      const orderData = {
         items,
         totalAmount: totalPrice,
         deliveryAddress: formData.deliveryAddress,
         phone: formData.phone,
         paymentMethod: formData.paymentMethod
-      });
+      };
 
+      // Add guest email if not logged in
+      if (!user) {
+        if (!formData.guestEmail) {
+          toast.error('Please enter your email to track orders');
+          setLoading(false);
+          return;
+        }
+        orderData.guestEmail = formData.guestEmail;
+      }
+
+      const response = await API.post('/orders', orderData);
+      
       clearCart();
       toast.success('Order placed successfully! 🎉');
-      navigate('/orders');
+      
+      // If guest user, show tracking info
+      if (!user) {
+        toast.success(`Track using email or phone on 'Track Order' page!`);
+        navigate('/track-order');
+      } else {
+        navigate('/orders');
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Order failed');
     } finally {
@@ -47,7 +78,28 @@ const Checkout = () => {
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Checkout 📋</h1>
 
+        {user && (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
+            <p className="text-blue-700">✅ Logged in as <strong>{user.name}</strong></p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow p-6 space-y-4">
+          {!user && (
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">Email <span className="text-red-500">*</span></label>
+              <input
+                type="email"
+                required={!user}
+                placeholder="your@email.com"
+                value={formData.guestEmail}
+                onChange={e => setFormData({ ...formData, guestEmail: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <p className="text-xs text-gray-500 mt-1">💡 Use this email to track your orders</p>
+            </div>
+          )}
+
           <div>
             <label className="block text-gray-700 font-medium mb-2">Delivery Address</label>
             <textarea
