@@ -54,7 +54,7 @@ const Checkout = () => {
         orderData.guestEmail = formData.guestEmail;
       }
 
-      const response = await API.post('/orders', orderData);
+      await API.post('/orders', orderData);
       
       clearCart();
       toast.success('Order placed successfully! 🎉');
